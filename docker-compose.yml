@@ -1,0 +1,36 @@
+version: '3.8'
+
+networks:
+  bot-net:
+    driver: bridge
+
+services:
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: n8n
+    restart: unless-stopped
+    ports:
+      - "5678:5678"        # Solo este puerto expuesto al host
+    environment:
+      - N8N_HOST=localhost
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - WEBHOOK_URL=http://localhost:5678/
+      - GENERIC_TIMEZONE=Europe/Madrid
+    volumes:
+      - ./n8n-data:/home/node/.n8n
+    networks:
+      - bot-net
+
+  openhands:
+    image: ghcr.io/all-hands-ai/openhands:main
+    container_name: openhands
+    restart: unless-stopped
+    # Sin ports → no expuesto al host, solo accesible dentro de bot-net
+    environment:
+      - SANDBOX_TYPE=local
+    volumes:
+      - ./openhands-data:/opt/workspace_base
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - bot-net
