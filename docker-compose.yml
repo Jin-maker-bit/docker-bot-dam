@@ -10,7 +10,7 @@ services:
     container_name: n8n
     restart: unless-stopped
     ports:
-      - "5678:5678"        # Solo este puerto expuesto al host
+      - "5678:5678"
     environment:
       - N8N_HOST=localhost
       - N8N_PORT=5678
@@ -18,7 +18,7 @@ services:
       - WEBHOOK_URL=http://localhost:5678/
       - GENERIC_TIMEZONE=Europe/Madrid
     volumes:
-      - ./n8n-data:/home/node/.n8n
+      - n8n_data:/home/node/.n8n # ◄ CAMBIADO: Ahora es un volumen nombrado
     networks:
       - bot-net
 
@@ -26,11 +26,19 @@ services:
     image: ghcr.io/all-hands-ai/openhands:main
     container_name: openhands
     restart: unless-stopped
-    # Sin ports → no expuesto al host, solo accesible dentro de bot-net
+    ports:
+      - "3000:3000"
     environment:
       - SANDBOX_TYPE=local
+      - WORKSPACE_BASE=/opt/workspace_base
+      - LLM_MODEL=groq/llama3-8b-8192           
+      - LLM_API_KEY=gsk__TU_API_KEY_DE_GROQ_AQUÍ
     volumes:
-      - ./openhands-data:/opt/workspace_base
+      - openhands_workspace:/opt/workspace_base # ◄ CAMBIADO: Volumen nombrado
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - bot-net
+
+volumes: # ◄ NUEVA SECCIÓN OBLIGATORIA al final del archivo
+  n8n_data:
+  openhands_workspace:
