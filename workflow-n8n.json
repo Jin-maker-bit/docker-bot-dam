@@ -1,0 +1,104 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "generar-docker",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "3d8c162f-2883-43b8-b61f-b14cc368abd6",
+      "name": "Webhook",
+      "webhookId": "53452602-6ccd-4599-a8b6-68c7843466c3"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.groq.com/openai/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer TU_API_KEY_DE_GROQ_AQUI"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"llama-3.1-8b-instant\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"Eres un generador experto de entornos Docker. Cuando el usuario describa lo que necesita, responde ÚNICAMENTE con un fichero docker-compose.yml válido y bien formateado, sin explicaciones adicionales, sin bloques de código markdown, solo el YAML puro.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"{{ $json.body.mensaje }}\"\n    }\n  ],\n  \"max_tokens\": 2000\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "e07bbfe8-4a6a-4966-83cb-aa7b7c6b6081",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "=={{ $json.choices[0].message.content }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        416,
+        0
+      ],
+      "id": "d9b2d81d-818d-41fe-9689-1a350e427b70",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "2b16e3e3-cf01-4ba6-b225-068c857d9f1f",
+  "meta": {
+    "instanceId": "ad9f0f3c287f635e722a4a7868ab5c106805cfda936fde6ce29e101310dfd703"
+  },
+  "id": "D8Kry1qj5gll8hNA",
+  "tags": []
+}
