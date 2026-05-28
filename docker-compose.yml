@@ -1,24 +1,24 @@
-version: '3.8'
-
 networks:
   bot-net:
     driver: bridge
 
 services:
   n8n:
-    image: n8nio/n8n:latest
+    build: .
     container_name: n8n
     restart: unless-stopped
+    user: root
     ports:
       - "5678:5678"
     environment:
       - N8N_HOST=localhost
       - N8N_PORT=5678
       - N8N_PROTOCOL=http
-      - WEBHOOK_URL=http://localhost:5678/
+      - WEBHOOK_URL=https://broom-broadside-vaguely.ngrok-free.dev/
       - GENERIC_TIMEZONE=Europe/Madrid
     volumes:
-      - n8n_data:/home/node/.n8n # ◄ CAMBIADO: Ahora es un volumen nombrado
+      - n8n_data:/home/node/.n8n
+      - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - bot-net
 
@@ -31,14 +31,14 @@ services:
     environment:
       - SANDBOX_TYPE=local
       - WORKSPACE_BASE=/opt/workspace_base
-      - LLM_MODEL=groq/llama3-8b-8192           
-      - LLM_API_KEY=gsk__TU_API_KEY_DE_GROQ_AQUÍ
+      - LLM_MODEL=groq/llama3-8b-8192
+      - LLM_API_KEY=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
     volumes:
-      - openhands_workspace:/opt/workspace_base # ◄ CAMBIADO: Volumen nombrado
+      - openhands_workspace:/opt/workspace_base
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - bot-net
 
-volumes: # ◄ NUEVA SECCIÓN OBLIGATORIA al final del archivo
+volumes:
   n8n_data:
   openhands_workspace:
