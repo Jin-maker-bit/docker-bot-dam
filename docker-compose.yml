@@ -32,7 +32,7 @@ services:
       - SANDBOX_TYPE=local
       - WORKSPACE_BASE=/opt/workspace_base
       - LLM_MODEL=groq/llama3-8b-8192
-      - LLM_API_KEY=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
+      - LLM_API_KEY=AQUI_VA_TU_API_KEY
     volumes:
       - openhands_workspace:/opt/workspace_base
       - /var/run/docker.sock:/var/run/docker.sock
