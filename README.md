@@ -12,7 +12,7 @@ Un bot de Telegram con IA que, a partir de una descripción en lenguaje natural,
 
 ```
 Usuario: "Quiero un Nginx con PHP"
-Bot: ✅ Entorno generado y desplegado
+Bot:  Entorno generado 
      services:
        nginx:
          image: nginx:latest
@@ -147,9 +147,9 @@ docker-bot-dam/
 
 ## Niveles completados
 
-- ✅ **Nivel 1** — Infraestructura base: n8n + OpenHands en red bridge, conexión con Groq, system prompt configurado, README
-- ✅ **Nivel 2** — Despliegue real: volúmenes de persistencia, despliegue automático de contenedores
-- ✅ **Nivel 3** — Integración completa: bot de Telegram, túnel ngrok, gestión de contenedores (/listar, /parar, /eliminar)
+- **Nivel 1** — Infraestructura base: n8n + OpenHands en red bridge, conexión con Groq, system prompt configurado, README
+- **Nivel 2** — Despliegue real: volúmenes de persistencia, despliegue automático de contenedores
+- **Nivel 3** — Integración completa: bot de Telegram, túnel ngrok, gestión de contenedores (/listar, /parar, /eliminar)
 
 ---
 
